@@ -66,9 +66,6 @@ if __name__ == '__main__':
         for y in cellular_grid:
             print(y)
 
-    # bits = np.array(cellular_grid)
-    # bits = np.packbits(bits)
-    # bits.tofile('image.png')
     image = Image.fromarray(np.uint32(cellular_grid), 'L')
     image.save('pil_image.png')
 
