@@ -33,7 +33,7 @@ noise_grid = []
 cellular_grid = []
 noise_density = 0.5
 wall_threshold = 4
-iterations = 3
+iterations = 6
 seed = 123456
 
 if __name__ == '__main__':
@@ -64,9 +64,10 @@ if __name__ == '__main__':
         cellular_grid = iterate(cellular_grid)
         for y in cellular_grid:
             print(y)
+        image = Image.fromarray(np.uint8(cellular_grid))
+        image.save(f'pil_image_iteration{i}.png')
 
-    image = Image.fromarray(np.uint8(cellular_grid))
-    image.save('pil_image.png')
+
 
 
 
