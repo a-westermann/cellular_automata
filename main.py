@@ -23,7 +23,6 @@ def iterate(grid: [str]) -> [str]:
         for x in range(len(grid[y])):
             row[x] = WALL \
                 if get_neighbors_wall_count(x, y, grid) > wall_threshold else FLOOR
-        # next_grid[y] = ''.join(row)
         next_grid[y] = row
     return next_grid
 
@@ -34,7 +33,7 @@ noise_grid = []
 cellular_grid = []
 noise_density = 0.5
 wall_threshold = 4
-iterations = 2
+iterations = 3
 seed = 123456
 
 if __name__ == '__main__':
@@ -66,7 +65,7 @@ if __name__ == '__main__':
         for y in cellular_grid:
             print(y)
 
-    image = Image.fromarray(np.uint32(cellular_grid), 'L')
+    image = Image.fromarray(np.uint8(cellular_grid))
     image.save('pil_image.png')
 
 
