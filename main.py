@@ -1,5 +1,6 @@
 import random
-
+import numpy as np
+from PIL import Image
 
 def get_neighbors_wall_count(x_index: int, y_index: int, noise: [str]) -> int:
     # returns number of walls adjacent (incl. diagonals)
@@ -10,7 +11,7 @@ def get_neighbors_wall_count(x_index: int, y_index: int, noise: [str]) -> int:
             x_check = x_index + x
             y_check = y_index + y
             if 0 > x_check or x_check >= len(noise[0]) or 0 > y_check or y_check >= len(noise)\
-              or noise[y_check][x_check] == '#':
+              or noise[y_check][x_check] == WALL:
                 wall_count += 1
     return wall_count
 
@@ -20,33 +21,37 @@ def iterate(grid: [str]) -> [str]:
     for y in range(len(grid)):
         row = list(next_grid[y])
         for x in range(len(grid[y])):
-            row[x] = '#' \
-                if get_neighbors_wall_count(x, y, grid) > wall_threshold else ' '
-        next_grid[y] = ''.join(row)
+            row[x] = WALL \
+                if get_neighbors_wall_count(x, y, grid) > wall_threshold else FLOOR
+        # next_grid[y] = ''.join(row)
+        next_grid[y] = row
     return next_grid
 
 
+WALL = 255
+FLOOR = 0
 noise_grid = []
 cellular_grid = []
-noise_density = 0.55
+noise_density = 0.5
 wall_threshold = 4
-iterations = 8
+iterations = 2
 
 if __name__ == '__main__':
-    width = 300
-    height = 50
+    width = 800
+    height = 800
     for y in range(height):
-        noise_grid.append('')
+        noise_grid.append([])
         for _ in range(width):
-            noise_grid[-1] += ' '
+            noise_grid[-1].append(FLOOR)
 
     # generate noise
     for y in range(height):
         row = list(noise_grid[y])
         for x in range(width):
             if random.random() <= noise_density:
-                row[x] = '#'
-        noise_grid[y] = ''.join(row)
+                row[x] = WALL
+        # noise_grid[y] = ''.join(row)
+        noise_grid[y] = row
 
     for y in noise_grid:
         print(y)
@@ -59,7 +64,11 @@ if __name__ == '__main__':
         for y in cellular_grid:
             print(y)
 
-
+    # bits = np.array(cellular_grid)
+    # bits = np.packbits(bits)
+    # bits.tofile('image.png')
+    image = Image.fromarray(np.uint32(cellular_grid), 'L')
+    image.save('pil_image.png')
 
 
 
