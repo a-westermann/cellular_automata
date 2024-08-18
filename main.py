@@ -35,10 +35,12 @@ cellular_grid = []
 noise_density = 0.5
 wall_threshold = 4
 iterations = 2
+seed = 123456
 
 if __name__ == '__main__':
     width = 800
     height = 800
+    random.seed(seed)
     for y in range(height):
         noise_grid.append([])
         for _ in range(width):
