@@ -2,6 +2,7 @@ import random
 import numpy as np
 from PIL import Image
 
+
 def get_neighbors_wall_count(x_index: int, y_index: int, noise: [str]) -> int:
     # returns number of walls adjacent (incl. diagonals)
     wall_count = 0
@@ -27,18 +28,19 @@ def iterate(grid: [str]) -> [str]:
     return next_grid
 
 
-WALL = 255
-FLOOR = 0
+WALL = 0
+FLOOR = 255
 noise_grid = []
 cellular_grid = []
-noise_density = 0.5
+noise_density = 0.62
 wall_threshold = 4
-iterations = 6
-seed = 123456
+iterations = 10
+seed = random.randrange(0, 9999999)
 
 if __name__ == '__main__':
-    width = 800
-    height = 800
+    print(f'Seed:  {seed}')
+    width = 300
+    height = 200
     random.seed(seed)
     for y in range(height):
         noise_grid.append([])
@@ -51,21 +53,22 @@ if __name__ == '__main__':
         for x in range(width):
             if random.random() <= noise_density:
                 row[x] = WALL
-        # noise_grid[y] = ''.join(row)
         noise_grid[y] = row
 
-    for y in noise_grid:
-        print(y)
+#TODO: Try another image generator. This one is having issues with
+#       np arrays and making 1-bit images
+    image = Image.fromarray(np.uint8(noise_grid), 'L')
+    image.save(f'_noise.png')
 
     cellular_grid = noise_grid.copy()
     print('\nCellular grid:')
     for i in range(iterations):
         print(f'\n\nIteration: {i}')
         cellular_grid = iterate(cellular_grid)
-        for y in cellular_grid:
-            print(y)
-        image = Image.fromarray(np.uint8(cellular_grid))
-        image.save(f'pil_image_iteration{i}.png')
+        # for y in cellular_grid:
+        #     print(y)
+        image = Image.fromarray(np.uint8(cellular_grid), 'L')
+        image.save(f'ca_iteration{i}.png')
 
 
 
